@@ -100,23 +100,27 @@ print(f'List of max procent predict: {give_index(classes_names[prediction3], 2)}
 
 def give_track_id(id, num):
     
-    token='y0_AgAAAABUzxkNAAG8XgAAAAD5FT2pAAANjfSxyG5KUJGWZL4YyRTcLHW4qQ'
-    client=Client(token=token).init()
-    album_info = ((str(client.albumsWithTracks(id)).split("[[{"))[1])
-
-    pattern = r"'id': '\d+"
-    # pattern2 = r"'\w: "
-    id_tracks2 = re.findall(pattern, album_info)
-    id_tracks3 = []
-    for el in id_tracks2:
-        result = re.findall(r'\d+', el)
-        id_tracks3.append(result)
-        id_tracks = []
-        for x in id_tracks3:
-            id_tracks.extend(x if isinstance(x, list) else [x])
-
-
-    return id_tracks[0:num]
+        token='y0_AgAAAABUzxkNAAG8XgAAAAD5FT2pAAANjfSxyG5KUJGWZL4YyRTcLHW4qQ'
+        client=Client(token=token).init()
+        try:
+            album_info = ((str(client.albumsWithTracks(id)).split("[[{"))[1])
+        except IndexError:
+            album_info = ((str(client.albumsWithTracks(id)).split("[[{"))[0])
+        
+        pattern = r"'id': '\d+"
+        id_tracks2 = re.findall(pattern, album_info)
+        id_tracks3 = []
+        for el in id_tracks2:
+            result = re.findall(r'\d+', el)
+            id_tracks3.append(result)
+            id_tracks = []
+            for x in id_tracks3:
+                id_tracks.extend(x if isinstance(x, list) else [x])
+            if len(id_tracks)!=0:
+                return id_tracks[0:num]
+            else:
+                id_tracks = ['28973341']
+                return id_tracks
 
 # %%
 
