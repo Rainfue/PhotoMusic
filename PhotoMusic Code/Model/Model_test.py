@@ -8,7 +8,8 @@ from keras.preprocessing import image_dataset_from_directory
 import re
 from yandex_music import Client
 from random import randint
-
+# %%
+import keras
 # %%
 # Assigning classes
 classes_names = ['alternative', 'classical', 'electronics', 'metal', 'pop', 'rap', 'rock']  
