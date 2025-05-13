@@ -1,2 +1,4 @@
 Data
-PhotoMusic\Rework\downloads
+database/
+*.db
+*.jpg

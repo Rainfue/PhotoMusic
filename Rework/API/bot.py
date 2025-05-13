@@ -21,6 +21,7 @@ class TGBot():
         self.ymusic = YMusic()
         self._register_handlers()
         self.db = UserDB()
+        self.user_id = None
 
     def _register_handlers(self):
         '''Регистрация обработчиков сообщений'''
@@ -29,10 +30,27 @@ class TGBot():
 
     async def _start_handler(self, message: types.Message):
         '''Обработчик команды /start'''
-        await message.answer('Привет! Отправь мне фото')
+        info = (message.from_user.first_name, 
+          message.from_user.last_name,
+          message.from_user.id, 
+          message.from_user.is_premium,
+          message.from_user.username,
+          message.from_user.is_bot,
+          )
+        print(f'user ID start: {message.from_user.id}')
+        self.user_id = message.from_user.id
+        print(f'user ID: {self.user_id}')
+        self.db.add_info(info)
+
+        await message.answer('''Привет! Этот бот умеет создавать плейлисты с музыкой на основе присланной фотографии.
+                             \nПо всем вопросом можно обратиться анонимно здесь 👉https://t.me/HlebAnonBot
+                             \nИли написать лично сюда 👉https://t.me/marrainfue
+                             ''')
 
     async def _photo_handler(self, message: types.Message):
         '''Обработчик фотографий'''
+        # Обновляем кол-во фотографий от пользователя в базе данных
+        self.db.update_img_count(self.user_id)
         try:
             # Скачиваем фото 
             photo = message.photo[-1]   # Берем самое высокое качество
@@ -42,27 +60,30 @@ class TGBot():
             # Сохраняем на сервер
             os.makedirs('downloads', exist_ok=True)
             download_path = f'downloads/{file_id}.jpg'
+            print(download_path)
+            print(message.from_user.first_name)
             await self.bot.download_file(file.file_path, download_path)
 
             # Классификация изображения 
             top3, top3conf = self.model.classificate(download_path)
             # Считаем треки
             tracks_count = self.ymusic.tracks_counter(top3conf)
+            print(tracks_count)
             print(top3[1])
-            print(self.db.fetch_random_track(top3[1], top3conf[1]))
-            # tracklist = []
-            # for i in range(3):
-            #     tracklist = tracklist + self.db.fetch_random_track(top3[i], top3conf[i])
-            #     print(tracklist)
-
-            # await message.reply(tracklist)
+            print(top3conf[1])
+            print('Классификация прошла успешно!')
+            print('-------------------------')
+            print(self.db.fetch_random_track(top3[1], tracks_count[1]))
+            tracklist = []
+            for i in range(3):
+                tracklist = tracklist + self.db.fetch_random_track(top3[i], tracks_count[i])
 
             # Отправляем результат пользователю
             await message.reply(
-                f'Топ 3 класса: {top3}\n'
-                f'Уверенность: {top3conf}\n'
-                f'Кол-во треков: {self.ymusic.tracks_counter(top3conf)}'
-                # f'Плейлист: {self.ymusic.create_playlist(top3[0], tracklist=tracklist)}'
+                f'''Ваш плейлист готов! \n{self.ymusic.create_playlist(
+                    top3[0],                
+                    tracklist=tracklist    
+                    )}'''
             )
 
         except Exception as e:

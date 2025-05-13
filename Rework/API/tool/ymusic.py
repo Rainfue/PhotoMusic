@@ -20,11 +20,11 @@ class YMusic():
 
         # Вставляю треки в плейлист
         for i in range(len(tracklist)):   
-            album_id = tracklist[i].split()[0]
-            track_id = tracklist[i].split()[1]
+            album_id = tracklist[i][0]
+            track_id = tracklist[i][1]
 
             # time.sleep(0.1)  # Эмулируем задержку выполнения
-            Client.users_playlists_insert_track(self=self.clientclient,
+            Client.users_playlists_insert_track(self=self.client,
                                                 kind=playlist_id,
                                                 album_id=f"{album_id}", 
                                                 revision=i+1,

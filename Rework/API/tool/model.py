@@ -10,10 +10,10 @@ class ClassificationModel():
     def __init__(self, model_path: str):
         # Проверка формата путя к модели
         if not isinstance(model_path, str):
-            print(f'Путь к модели должен быть в формате str, а не {type(model_path)}')
+            raise TypeError(f'Путь к модели должен быть в формате str, а не {type(model_path)}')
         # Проверка, существует ли путь
         if not os.path.exists(model_path):
-            print(f'Путь к модели не найден')
+            raise TypeError(f'Путь к модели не найден')
 
         try:
             # Инициализация модели
@@ -43,9 +43,7 @@ class ClassificationModel():
     
 
 if __name__ == '__main__':
-    # print(os.listdir('../'))
-    # print(os.getcwd())
     model = ClassificationModel('Model/model_10ep/weights/best.pt')
     print(model)
 
-    print(model.classificate(r'C:\Users\User\PhotoMusic\PhotoMusic_Project\Site\static\uploads\photo_2024-02-21_00-18-27.jpg'))
+    print(model.classificate(r'D:\Helper\MLBazyak\chemp\PhotoMusic\Rework\user_img.jpg'))
