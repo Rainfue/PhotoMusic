@@ -2,16 +2,16 @@ import os
 # Импортирование библиотек
 import sqlite3
 
-from config import USERS_DB, TRACKS_DATA
+from tool.config import USERS_DB, TRACKS_DATA
 
-print(os.listdir('API/database/users_data.db'))
+print(os.getcwd())
 
 
 # Класс для работы с базами данных
 class UserDB():
     # Конструктор класса
     def __init__(self):
-        self.path = 'API/database/users_data.db'
+        self.path = USERS_DB
 
     def add_info(self, info):
         '''Ф-я для добавления юзера в базу данных'''
@@ -34,7 +34,7 @@ class UserDB():
         conn.close()
 
     def fetch_random_track(self, genre: str, count: int):
-        conn = sqlite3.connect(self.path)
+        conn = sqlite3.connect(TRACKS_DATA)
         cursor = conn.cursor()
         cursor.execute('''SELECT album_id, track_id FROM tracks WHERE genre = ? ORDER BY RANDOM() LIMIT ?''', (genre, count))
         songs = cursor.fetchmany(count)
@@ -43,4 +43,4 @@ class UserDB():
     
 if __name__ == '__main__':
     usersDb = UserDB()
-    usersDb.fetch_random_track('rap', 12)
+    print(usersDb.fetch_random_track('rap', 12))

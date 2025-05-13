@@ -9,6 +9,7 @@ from aiogram.types import FSInputFile
 from tool.model import ClassificationModel
 from tool.config import TGTOKEN, MODEL_PATH
 from tool.ymusic import YMusic
+from tool.database import UserDB
 
 # Класс для телеграмм бота
 class TGBot():
@@ -19,6 +20,7 @@ class TGBot():
         self.model = ClassificationModel(model_path)
         self.ymusic = YMusic()
         self._register_handlers()
+        self.db = UserDB()
 
     def _register_handlers(self):
         '''Регистрация обработчиков сообщений'''
@@ -44,13 +46,23 @@ class TGBot():
 
             # Классификация изображения 
             top3, top3conf = self.model.classificate(download_path)
+            # Считаем треки
+            tracks_count = self.ymusic.tracks_counter(top3conf)
+            print(top3[1])
+            print(self.db.fetch_random_track(top3[1], top3conf[1]))
+            # tracklist = []
+            # for i in range(3):
+            #     tracklist = tracklist + self.db.fetch_random_track(top3[i], top3conf[i])
+            #     print(tracklist)
+
+            # await message.reply(tracklist)
 
             # Отправляем результат пользователю
             await message.reply(
                 f'Топ 3 класса: {top3}\n'
                 f'Уверенность: {top3conf}\n'
                 f'Кол-во треков: {self.ymusic.tracks_counter(top3conf)}'
-                f'Плейлист: {self.ymusic.create_playlist(top3[0], tracklist=None)}'
+                # f'Плейлист: {self.ymusic.create_playlist(top3[0], tracklist=tracklist)}'
             )
 
         except Exception as e:
