@@ -1,4 +1,5 @@
 Data
 database/
+config.py
 *.db
 *.jpg

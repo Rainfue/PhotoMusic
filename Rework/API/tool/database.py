@@ -1,5 +1,5 @@
-import os
 # Импортирование библиотек
+import os
 import sqlite3
 
 from tool.config import USERS_DB, TRACKS_DB
@@ -11,8 +11,32 @@ print(os.getcwd())
 class UserDB():
     # Конструктор класса
     def __init__(self):
+        # Создаем папку для баз данных, если ее нет
+        os.makedirs('API/database', exist_ok=True)
+        # Получаем пути к БД
         self.user_path = USERS_DB
         self.track_path = TRACKS_DB
+
+        # Если БД для пользователей отсутствует, создаю пустую
+        self._init_user_db()
+
+    # Функция для инициализации пустой базы данных пользователей
+    def _init_user_db(self):
+        '''Создает базу данных пользователей с нужной структурой'''
+        with sqlite3.connect(self.user_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS users (
+                           first_name TEXT,
+                           last_name TEXT,
+                           user_id INTEGER PRIMARY KEY,
+                           is_premium INTEGER,
+                           username TEXT,
+                           is_bot INTEGER,
+                           img_count INTEGER DEFAULT 0
+                           )
+                        ''')
+            conn.commit()
 
     # Функция для добавления юзера в базу данных
     def add_info(self, info):
@@ -66,7 +90,6 @@ class UserDB():
 
     def update_img_count(self, user_id):
         current_count = self.get_img_count(user_id)
-        print(f'Текущее кол-во фотографий: {current_count}')
 
         if current_count is not None:
             new_count = current_count + 1

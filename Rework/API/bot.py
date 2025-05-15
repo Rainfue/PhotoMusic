@@ -4,7 +4,6 @@ import os
 
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters import Command
-from aiogram.types import FSInputFile
 
 from tool.model import ClassificationModel
 from tool.config import TGTOKEN, MODEL_PATH
@@ -37,7 +36,7 @@ class TGBot():
           message.from_user.username,
           message.from_user.is_bot,
           )
-        print(f'user ID start: {message.from_user.id}')
+        
         self.user_id = message.from_user.id
         print(f'user ID: {self.user_id}')
         self.db.add_info(info)
@@ -49,6 +48,8 @@ class TGBot():
 
     async def _photo_handler(self, message: types.Message):
         '''Обработчик фотографий'''
+        # Получаем ID пользователя и сохраняем
+        self.user_id = message.from_user.id
         # Обновляем кол-во фотографий от пользователя в базе данных
         self.db.update_img_count(self.user_id)
         try:
@@ -59,32 +60,36 @@ class TGBot():
 
             # Сохраняем на сервер
             os.makedirs('downloads', exist_ok=True)
-            download_path = f'downloads/{file_id}.jpg'
-            print(download_path)
-            print(message.from_user.first_name)
+            download_path = f'downloads/{message.from_user.username}_{self.db.get_img_count(self.user_id)}.jpg'
+
             await self.bot.download_file(file.file_path, download_path)
 
             # Классификация изображения 
             top3, top3conf = self.model.classificate(download_path)
             # Считаем треки
             tracks_count = self.ymusic.tracks_counter(top3conf)
-            print(tracks_count)
-            print(top3[1])
-            print(top3conf[1])
-            print('Классификация прошла успешно!')
-            print('-------------------------')
-            print(self.db.fetch_random_track(top3[1], tracks_count[1]))
+
             tracklist = []
             for i in range(3):
                 tracklist = tracklist + self.db.fetch_random_track(top3[i], tracks_count[i])
+            playlist_link = self.ymusic.create_playlist(
+                top3[0],
+                tracklist=tracklist 
+            )
 
             # Отправляем результат пользователю
             await message.reply(
-                f'''Ваш плейлист готов! \n{self.ymusic.create_playlist(
-                    top3[0],                
-                    tracklist=tracklist    
-                    )}'''
+                f'Ваш плейлист готов! \n{playlist_link}'
             )
+
+            # Логирование
+            print('-'*30)
+            print(f'Пользователь: {message.from_user.first_name} | {self.db.get_img_count(self.user_id)} ф-й')
+            print(f'Путь к фотографии: {download_path}')
+            print(f'Основной жанр: {top3[0]} | {top3conf[0]:.2f}')
+            print(f'Доп. жанры: {top3[1]}, {top3[2]} | {top3conf[1]:.2f}, {top3conf[2]:.2f}')
+            print(f'Путь к альбому: {playlist_link}')
+            print('-'*30, '\n')
 
         except Exception as e:
             await message.reply(f'Произошла ошибка -- {e}')
