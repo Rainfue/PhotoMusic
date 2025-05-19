@@ -1,3 +1,4 @@
+.env
 Data
 database/
 config.py
