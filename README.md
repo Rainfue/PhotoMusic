@@ -1,6 +1,42 @@
-# PhotoMusic
-PhotoMusic - is a project that implements the creation of a music playlist based on an image.
 
-Video presentation -- [https://drive.google.com/file/d/1T2G1OMCSq6B-gY4KFfZXlzwjugj3tksB/view?usp=sharing](https://drive.google.com/file/d/1OSCFZtKIgZz4TaPQ0yhTlT9ZHdBUouIa/view?usp=drive_link)https://drive.google.com/file/d/1OSCFZtKIgZz4TaPQ0yhTlT9ZHdBUouIa/view?usp=drive_link
+# PhotoMusic Bot 🎵🤖
 
-test
+Telegram-бот, который создает музыкальные плейлисты на основе изображения.
+
+## Возможности
+- Принимает фотографию
+- Определяет жанры с помощью YOLO
+- Создает плейлист на Яндекс.Музыке
+
+## Запуск
+
+1. Установите зависимости:
+```bash
+pip install -r requirements.txt
+```
+
+2. Создайте `.env` файл:
+
+```dotenv
+TGTOKEN=...
+YMTOKEN=...
+MODEL_PATH=...
+USERS_DB=...
+TRACKS_DB=...
+```
+
+3. Запустите бота:
+
+```bash
+python bot.py
+```
+
+## Зависимости
+
+* aiogram
+* ultralytics (YOLO)
+* aiosqlite
+* python-dotenv
+* yandex-music
+
+
