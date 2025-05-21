@@ -31,11 +31,18 @@ class ClassificationModel():
     # Функция для классификации
     def classificate(self, img: str):
         # Получение топ 3 класса (жанра)
-        result = self.model(img)[0]
+        result = self.model.predict(img, 
+                                    verbose=False,
+                                    show=False,
+                                    save=False)[0]
         self.result = result
+
+        # Получаем топ 3 уверенности
+        confidences = self.result.probs.top5conf[:3].cpu().numpy().astype(np.float32)
+
         return (
             [self.classes[i] for i in result.probs.top5[:3]],
-            np.array(self.result.probs.top5conf[:3].cpu())
+            confidences
         )
     
     def __str__(self):
@@ -43,7 +50,6 @@ class ClassificationModel():
     
 
 if __name__ == '__main__':
-    model = ClassificationModel('Model/model_10ep/weights/best.pt')
-    print(model)
+    model = ClassificationModel('/home/mar/PhotoMusic/main/model/model_10ep/weights/best.pt')
 
-    print(model.classificate(r'D:\Helper\MLBazyak\chemp\PhotoMusic\Rework\user_img.jpg'))
+    print(model.classificate(r'/home/mar/PhotoMusic/main/downloads/marrainfue_None.jpg'))

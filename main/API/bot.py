@@ -60,7 +60,8 @@ class TGBot():
 
             # Сохраняем на сервер
             os.makedirs('downloads', exist_ok=True)
-            download_path = f'downloads/{message.from_user.username}_{self.db.get_img_count(self.user_id)}.jpg'
+            img_count = self.db.get_img_count(self.user_id) if self.db.get_img_count(self.user_id) is not None else 0
+            download_path = f'downloads/{message.from_user.username}_{img_count}.jpg'
 
             await self.bot.download_file(file.file_path, download_path)
 
