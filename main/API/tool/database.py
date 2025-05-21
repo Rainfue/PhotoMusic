@@ -45,7 +45,7 @@ class UserDB():
         '''
         conn = sqlite3.connect(self.user_path)
         cursor = conn.cursor()
-        cursor.execute('''INSERT INTO users (first_name, 
+        cursor.execute('''INSERT OR IGNORE INTO users (first_name, 
                                             last_name,
                                             user_id,
                                             is_premium,

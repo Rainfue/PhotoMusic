@@ -1,6 +1,4 @@
 .env
 Data
-database/
-config.py
-*.db
+users_data.db
 *.jpg

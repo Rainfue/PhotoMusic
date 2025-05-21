@@ -101,5 +101,9 @@ class TGBot():
 
 # Запуск бота
 if __name__ == '__main__':
+    print(f'Директория основного файла: {os.getcwd()}')
+    model_path = os.path.join(os.getcwd(), MODEL_PATH)
+    print(f'Путь к модели(осн): {model_path}')
+    print(os.path.exists(model_path))
     bot = TGBot()
     asyncio.run(bot.run())
