@@ -1,4 +1,4 @@
 .env
-Data
 users_data.db
 *.jpg
+logs/
