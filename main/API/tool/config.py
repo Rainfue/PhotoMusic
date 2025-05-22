@@ -2,6 +2,9 @@
 from dotenv import load_dotenv
 import os
 
+from tool.logger import setup_logger
+logger = setup_logger(__name__)
+
 load_dotenv()
 
 # Токены к API
@@ -15,7 +18,6 @@ TRACKS_DB = os.getenv('TRACKS_DB')
 
 # Логирование
 for path in [MODEL_PATH, USERS_DB, TRACKS_DB]:
-
-    print(f'Доступность: {os.path.exists(path)}')
-    print(f'Путь: {path}')
-    print('-'*30)
+    logger.debug(f'Путь: {path}')
+    logger.debug(f'Доступность: {os.path.exists(path)}')
+    logger.debug('-'*30)

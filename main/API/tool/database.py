@@ -3,8 +3,11 @@ import os
 import sqlite3
 
 from tool.config import USERS_DB, TRACKS_DB
+from tool.logger import setup_logger
+logger = setup_logger(__name__)
 
-print(os.getcwd())
+# Логирование
+logger.debug('Модуль для баз данных импортирован!')
 
 
 # Класс для работы с базами данных

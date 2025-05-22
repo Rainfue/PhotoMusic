@@ -4,6 +4,11 @@ from datetime import date
 from yandex_music import Client
 
 from tool.config import YMTOKEN
+from tool.logger import setup_logger
+logger = setup_logger(__name__)
+
+# Логирование
+logger.debug('Модуль для работы с API импортирован!')
 
 # Класс для обращения к API Яндекс.Музыки
 class YMusic():

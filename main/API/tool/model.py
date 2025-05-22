@@ -3,6 +3,11 @@ import os
 
 import numpy as np
 from ultralytics import YOLO
+from tool.logger import setup_logger
+logger = setup_logger(__name__)
+
+# Логирование
+logger.debug('Модуль с моделью импортирован!')
 
 # Класс для работы с моделью классификации
 class ClassificationModel():
@@ -19,7 +24,7 @@ class ClassificationModel():
             # Инициализация модели
             self.model = YOLO(model_path)       
         except Exception as e:
-            print(f'Модель не найдена, проверьте путь\nОШибка: {e}')
+            logger.debug(f'Модель не найдена, проверьте путь\nОШибка: {e}')
         # Путь к модели
         self.model_path = model_path
         # Словарь классов

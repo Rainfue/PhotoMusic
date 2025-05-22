@@ -5,11 +5,12 @@ import os
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters import Command
 
-from tool.model import ClassificationModel
 from tool.config import TGTOKEN, MODEL_PATH
+from tool.model import ClassificationModel
 from tool.ymusic import YMusic
 from tool.database import UserDB
-from tool.logger import logger
+from tool.logger import setup_logger
+logger = setup_logger(__name__)
 
 # Класс для телеграмм бота
 class TGBot():
@@ -107,9 +108,16 @@ class TGBot():
 
 # Запуск бота
 if __name__ == '__main__':
-    print(f'Директория основного файла: {os.getcwd()}')
     model_path = os.path.join(os.getcwd(), MODEL_PATH)
-    print(f'Путь к модели(осн): {model_path}')
-    print(os.path.exists(model_path))
     bot = TGBot()
+
+    # Логирование
+    logger.debug('-'*30)
+    logger.debug(f'Директория основного файла: {os.getcwd()}')
+    logger.debug(f'Путь к модели(осн): {model_path}')
+    logger.debug(os.path.exists(model_path))
+    logger.debug('='*30)
+
+    # Запуск бота
     asyncio.run(bot.run())
+    
