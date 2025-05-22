@@ -9,6 +9,7 @@ from tool.model import ClassificationModel
 from tool.config import TGTOKEN, MODEL_PATH
 from tool.ymusic import YMusic
 from tool.database import UserDB
+from tool.logger import logger
 
 # Класс для телеграмм бота
 class TGBot():
@@ -21,6 +22,7 @@ class TGBot():
         self._register_handlers()
         self.db = UserDB()
         self.user_id = None
+        self.log = logger
 
     def _register_handlers(self):
         '''Регистрация обработчиков сообщений'''
@@ -38,13 +40,14 @@ class TGBot():
           )
         
         self.user_id = message.from_user.id
-        print(f'user ID: {self.user_id}')
         self.db.add_info(info)
 
         await message.answer('''Привет! Этот бот умеет создавать плейлисты с музыкой на основе присланной фотографии.
                              \nПо всем вопросом можно обратиться анонимно здесь 👉https://t.me/HlebAnonBot
                              \nИли написать лично сюда 👉https://t.me/marrainfue
                              ''')
+        # Логирование
+        self.log.info(f'user ID: {self.user_id} запустил бота!')
 
     async def _photo_handler(self, message: types.Message):
         '''Обработчик фотографий'''
@@ -84,16 +87,18 @@ class TGBot():
             )
 
             # Логирование
-            print('-'*30)
-            print(f'Пользователь: {message.from_user.first_name} | {self.db.get_img_count(self.user_id)} ф-й')
-            print(f'Путь к фотографии: {download_path}')
-            print(f'Основной жанр: {top3[0]} | {top3conf[0]:.2f}')
-            print(f'Доп. жанры: {top3[1]}, {top3[2]} | {top3conf[1]:.2f}, {top3conf[2]:.2f}')
-            print(f'Путь к альбому: {playlist_link}')
-            print('-'*30, '\n')
+            self.log.info('-'*30)
+            self.log.info(f'Пользователь: {message.from_user.first_name} | {self.db.get_img_count(self.user_id)} ф-й')
+            self.log.debug(f'Путь к фотографии: {download_path}')
+            self.log.info(f'Основной жанр: {top3[0]} | {top3conf[0]:.2f}')
+            self.log.info(f'Доп. жанры: {top3[1]}, {top3[2]} | {top3conf[1]:.2f}, {top3conf[2]:.2f}')
+            self.log.info(f'Путь к альбому: {playlist_link}')
+            self.log.info(f'{"-"*30}\n')
 
         except Exception as e:
             await message.reply(f'Произошла ошибка -- {e}')
+            # Логирование
+            self.log.debug(f'Произошла ошибка -- {e}')
 
     async def run(self):
         '''Запуск бота'''
