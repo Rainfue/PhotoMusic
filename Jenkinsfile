@@ -28,16 +28,16 @@ pipeline {
             }
         }
 
-        // Установка python
-        stage('Setup Python') {
-            steps {
-                sh  '''
-                    apt-get update
-                    apt-get install -y python3 python3-pip
-                    python3 --version
-                    '''
-            }
-        }
+        // // Установка python
+        // stage('Setup Python') {
+        //     steps {
+        //         sh  '''
+        //             apt-get update
+        //             apt-get install -y python3 python3-pip
+        //             python3 --version
+        //             '''
+        //     }
+        // }
 
         
         // Проверка путей и API-ключей (переменных)
@@ -55,23 +55,23 @@ pipeline {
             }
         }
 
-        // Подготовка виртуального окружения
-        stage('Prepare venv') {
-            steps {
-                echo 'Starting create venv...'
-                // Создаю виртуальное окружение
-                sh  '''
-                    python3 -m venv $VENV_DIR
-                    . $VENV_DIR/Scripts/activate
-                    which python
-                    '''
-                // скачиваю бибилиотеки
-                sh  '''
-                    pip install pandas
+        // // Подготовка виртуального окружения
+        // stage('Prepare venv') {
+        //     steps {
+        //         echo 'Starting create venv...'
+        //         // Создаю виртуальное окружение
+        //         sh  '''
+        //             python3 -m venv $VENV_DIR
+        //             . $VENV_DIR/Scripts/activate
+        //             which python
+        //             '''
+        //         // скачиваю бибилиотеки
+        //         sh  '''
+        //             pip install pandas
 
-                    '''
-            }
-        }
+        //             '''
+        //     }
+        // }
 
         // Unit-тесты
         stage('Tests') {
