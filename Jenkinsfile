@@ -15,9 +15,7 @@ pipeline {
             steps {
                 echo 'Testing...'
                 steps {
-                    sh  '''
-                        echo "Telegram token: $TGTOKEN" 
-                        '''
+                    bat 'echo %TGTOKEN%' 
                 }
             }
         }
