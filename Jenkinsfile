@@ -37,7 +37,7 @@ pipeline {
         stage('Setup Python') {
             steps {
                 sh  '''
-                    python3 --version
+                    python3 bot.py
                     '''
             }
         }
