@@ -1,21 +1,20 @@
 pipeline {
-    agent any  // Запуск на любом доступном агенте
-
+    agent any
     stages {
-        stage('Hello Jenkins') {
+        stage('Build') {
             steps {
-                echo '✅ Jenkins работает! Этот шаг выполнен успешно.'
-                sh 'echo "Проверка выполнения shell-команды..."'
+                echo 'Hello hello hello hello...'
             }
         }
-    }
-
-    post {
-        always {
-            echo 'Этап "post" всегда выполняется, даже если были ошибки.'
+        stage('Tests') {
+            steps {
+                //
+            }
         }
-        success {
-            echo '🎉 Пайплайн завершился успешно!'
+        stage('Deploy') {
+            steps {
+                //
+            }
         }
     }
 }
