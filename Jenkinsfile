@@ -30,11 +30,17 @@ pipeline {
                 sh  '''
                     docker --version
                     '''
-                // Проверяю версию python
+            }
+
+        // Установка python
+        stage('Setup Python') {
+            steps {
                 sh  '''
-                    python --version
+                    python3 --version
                     '''
             }
+        }
+
         }
         // Проверка путей и API-ключей (переменных)
         stage('Vars') {
