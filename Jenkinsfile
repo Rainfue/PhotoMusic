@@ -22,7 +22,7 @@ pipeline {
                 echo "Running ${env.BUILD_ID} on ${env.JENKINS_URL}"
                 // Проверяю версию python
                 sh  '''
-                    python3 --version
+                    python --version
                     '''
             }
         }
