@@ -14,9 +14,7 @@ pipeline {
         stage('Tests') {
             steps {
                 echo 'Testing...'
-                steps {
-                    bat 'echo %TGTOKEN%' 
-                }
+                sh "Telegram token: ${TGTOKEN}"
             }
         }
         stage('Deploy') {
