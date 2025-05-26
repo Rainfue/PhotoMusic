@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        TGTOKEN = credentials('TGTOKEN')
+        TGTOKEN = credentials('tgtoken')
     }
 
     stages {
