@@ -1,11 +1,6 @@
 pipeline {
     // Использование агента с python из docker образа
-    agent {
-        docker {
-            image 'python:3.9-slim'  // Официальный образ с Python
-            args '-v /tmp:/tmp --user root'  // Монтируем /tmp и работаем от root
-        }
-    }
+    agent any
 
     // Получаем secrets
     environment {
@@ -37,8 +32,8 @@ pipeline {
         stage('Setup Python') {
             steps {
                 sh  '''
-                    sudo apt-get update
-                    sudo apt-get install -y python3 python3-pip
+                    apt-get update
+                    apt-get install -y python3 python3-pip
                     python3 --version
                     '''
             }
