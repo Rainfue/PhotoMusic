@@ -5,16 +5,16 @@ pipeline {
             steps {
                 echo 'Hello hello hello hello...'
             }
-        }
-        stage('Tests') {
-            steps {
-                //
-            }
-        }
-        stage('Deploy') {
-            steps {
-                //
-            }
-        }
+        // }
+        // stage('Tests') {
+        //     steps {
+        //         //
+        //     }
+        // }
+        // stage('Deploy') {
+        //     steps {
+        //         //
+        //     }
+        // }
     }
 }
