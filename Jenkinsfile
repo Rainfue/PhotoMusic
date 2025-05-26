@@ -1,10 +1,21 @@
 pipeline {
-    agent { docker { image 'python:3.13.3-alpine3.21' } }
+    agent any  // Запуск на любом доступном агенте
+
     stages {
-        stage('build') {
+        stage('Hello Jenkins') {
             steps {
-                sh 'python --version'
+                echo '✅ Jenkins работает! Этот шаг выполнен успешно.'
+                sh 'echo "Проверка выполнения shell-команды..."'
             }
+        }
+    }
+
+    post {
+        always {
+            echo 'Этап "post" всегда выполняется, даже если были ошибки.'
+        }
+        success {
+            echo '🎉 Пайплайн завершился успешно!'
         }
     }
 }
