@@ -15,7 +15,7 @@ pipeline {
             steps {
                 echo 'Testing...'
                 sh  '''
-                    Telegram token: ${TGTOKEN}
+                    echo "Telegram token: ${TGTOKEN}"
                     '''
             }
         }
