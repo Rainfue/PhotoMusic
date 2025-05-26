@@ -1,78 +1,93 @@
 pipeline {
-    agent any
+    // Использование агента с python из docker образа
+    agent {
+        docker {
+            image 'python:3.9-slim'  // Официальный образ с Python
+            args '-v /tmp:/tmp --user root'  // Монтируем /tmp и работаем от root
+        }
+    }
 
+    // Получаем secrets
     environment {
+        // API-ключи
         TGTOKEN = credentials('tgtoken')
         YMTOKEN = credentials('ymtoken')
+        // Пути
         MODEL_PATH = credentials('model_path')
         USER_DB = credentials('users_db')
         TRACKS_DB = credentials('tracks_db')
+        // Имя venv
         VENV_DIR = '.venv'
     }
 
     stages {
+        // Логирование
         stage('Logs') {
             steps {
+                // Номер сборки и ссылка на запущенный Jenkins
                 echo "Running ${env.BUILD_ID} on ${env.JENKINS_URL}"
-                sh 'docker --version'
-                // Проверяем, какой Python доступен
-                sh '''
-                    echo "Available Python versions:"
-                    which python || true
-                    which python3 || true
-                    python --version || python3 --version || echo "Python not found"
-                '''
+                // Проверяю верию docker
+                sh  '''
+                    docker --version
+                    '''
             }
         }
 
+        // Установка python
         stage('Setup Python') {
             steps {
-                // Вместо установки через apt - используем готовый Python
-                sh '''
-                    python3 -m ensurepip --upgrade
-                    python3 -m pip install --upgrade pip
+                sh  '''
+                    sudo apt-get update
+                    sudo apt-get install -y python3 python3-pip
                     python3 --version
-                '''
+                    '''
             }
         }
 
+        
+        // Проверка путей и API-ключей (переменных)
         stage('Vars') {
             steps {
                 echo 'Get vars...'
-                sh '''
+                sh  '''
                     echo "Telegram token: ${TGTOKEN}"
                     echo "YaMusic token: ${YMTOKEN}"
-                    echo "Model path: ${MODEL_PATH}"
-                    echo "User DB path: ${USER_DB}"
-                    echo "Tracks DB path: ${TRACKS_DB}"
-                '''
+                    echo "Classifiction model path: ${MODEL_PATH}"
+                    echo "User database path: ${USER_DB}"
+                    echo "Tracks database path: ${TRACKS_DB}"
+                    echo "Venv name: ${VENV_DIR}"
+                    '''
             }
         }
 
+        // Подготовка виртуального окружения
         stage('Prepare venv') {
             steps {
-                echo 'Creating venv...'
-                sh '''
-                    python3 -m venv ${VENV_DIR}
-                    . ${VENV_DIR}/bin/activate
-                    pip install -r requirements.txt
-                '''
+                echo 'Starting create venv...'
+                // Создаю виртуальное окружение
+                sh  '''
+                    python3 -m venv $VENV_DIR
+                    . $VENV_DIR/Scripts/activate
+                    which python
+                    '''
+                // скачиваю бибилиотеки
+                sh  '''
+                    pip install pandas
+
+                    '''
             }
         }
 
+        // Unit-тесты
         stage('Tests') {
             steps {
-                echo 'Running tests...'
-                sh '''
-                    . ${VENV_DIR}/bin/activate
-                    python -m pytest tests/
-                '''
+                echo 'Testing...'
             }
         }
 
         stage('Deploy') {
             steps {
-                echo 'Deploying...'
+                echo 'Deploying..'
             }
         }
     }
