@@ -1,7 +1,10 @@
 pipeline {
     // Использование любого агента
     agent {
-        label 'python-agent'
+        docker {
+            image 'python:3.10-slim'    // Официальный образ Python
+            args '-v /tmp:/tmp'
+        }
     }
     // Получаем secrets
     environment {
