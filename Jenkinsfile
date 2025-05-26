@@ -37,7 +37,9 @@ pipeline {
         stage('Setup Python') {
             steps {
                 sh  '''
-                    python3 bot.py
+                    sudo apt-get update
+                    sudo apt-get install -y python3 python3-pip
+                    python3 --version
                     '''
             }
         }
