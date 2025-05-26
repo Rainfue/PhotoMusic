@@ -1,11 +1,12 @@
 pipeline {
     // Использование любого агента
-    agent {
-        docker {
-            image 'python:3.9-slim'    // Официальный образ Python
-            args '-v /tmp:/tmp'
-        }
-    }
+    agent any
+    // agent {
+    //     docker {
+    //         image 'python:3.9-slim'    // Официальный образ Python
+    //         args '-v /tmp:/tmp'
+    //     }
+    // }
     // Получаем secrets
     environment {
         // API-ключи
