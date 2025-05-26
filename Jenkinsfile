@@ -1,6 +1,8 @@
 pipeline {
     // Использование любого агента
-    agent any
+    agent {
+        label 'python-agent'
+    }
     // Получаем secrets
     environment {
         // API-ключи
