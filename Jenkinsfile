@@ -1,16 +1,11 @@
 pipeline {
     agent any
+
+    enviroment {
+        TGTOKEN = credentials('TGTOKEN')
+    }
+
     stages {
-        stage('Load .env') {
-            steps {
-                script {
-                    def envVars = readFile('.env').split('\n')
-                    withEnv(envVars) {
-                        sh 'echo "TGTOKEN is $TGTOKEN"'
-                    }
-                }
-            }
-        }
         stage('Build') {
             steps {
                 echo "Running ${env.BUILD_ID} on ${env.JENKINS_URL}"
@@ -19,6 +14,11 @@ pipeline {
         stage('Tests') {
             steps {
                 echo 'Testing...'
+                steps {
+                    sh  '''
+                        echo "Telegram token: $TGTOKEN" 
+                        '''
+                }
             }
         }
         stage('Deploy') {
