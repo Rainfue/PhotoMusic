@@ -20,10 +20,10 @@ pipeline {
                 echo 'Testing...'
                 sh  '''
                     echo "Telegram token: ${TGTOKEN}"
-                    echo "Telegram token: ${YMTOKEN}"
-                    echo "Telegram token: ${MODEL_PATH}"
-                    echo "Telegram token: ${USER_DB}"
-                    echo "Telegram token: ${TRACKS_DB}"
+                    echo "YaMusic token: ${YMTOKEN}"
+                    echo "Classifiction model path: ${MODEL_PATH}"
+                    echo "User database path: ${USER_DB}"
+                    echo "Tracks database path: ${TRACKS_DB}"
                     '''
             }
         }
