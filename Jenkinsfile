@@ -2,7 +2,7 @@ pipeline {
     // Использование любого агента
     agent {
         docker {
-            image 'python:3.10-slim'    // Официальный образ Python
+            image 'python:3.9-slim'    // Официальный образ Python
             args '-v /tmp:/tmp'
         }
     }
