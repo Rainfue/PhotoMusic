@@ -31,6 +31,7 @@ pipeline {
                     docker --version
                     '''
             }
+        }
 
         // Установка python
         stage('Setup Python') {
