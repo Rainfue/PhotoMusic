@@ -62,7 +62,9 @@ pipeline {
                     python3 -m venv $VENV_DIR
                     . ${VENV_DIR}/bin/activate || . ${VENV_DIR}/bin/activate.sh
                     which python
+                    pip install pandas
                     '''
+                    // ${VENV_DIR}/bin/pip install pandas
             }
         }
 
