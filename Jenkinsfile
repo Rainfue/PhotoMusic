@@ -60,13 +60,9 @@ pipeline {
                 // Создаю виртуальное окружение
                 sh  '''
                     python3 -m venv $VENV_DIR
-                    source $VENV_DIR/bin/activate
+                    . ${VENV_DIR}/bin/activate || . ${VENV_DIR}/bin/activate.sh
                     which python
                     '''
-                // скачиваю бибилиотеки
-                // sh  '''
-                //     pip install pandas
-                //     '''
             }
         }
 
