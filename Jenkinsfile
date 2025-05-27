@@ -62,7 +62,24 @@ pipeline {
                     python3 -m venv $VENV_DIR
                     . ${VENV_DIR}/bin/activate || . ${VENV_DIR}/bin/activate.sh
                     which python
-                    ${VENV_DIR}/bin/pip install pandas
+                    pwd
+                    ls
+                    '''
+            }
+        }
+
+        // Скачивание библиотек 
+        stafe('Launch libs') {
+            steps {
+                echo 'Starting download libs'
+
+                // Сначала устанавливаю PyTorch
+                sh  '''
+                    pip3 install torch torchvision torchaudio
+                    '''
+                // Далее, использую файл requirements4lnx.txt для установки остальных зависимостей
+                sh  '''
+                    pip3 install -r requirements4lnx.txt
                     '''
             }
         }
@@ -74,9 +91,14 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
+        stage('Run') {
             steps {
-                echo 'Deploying..'
+                echo 'Run..'
+                // Пробую запустить бота
+                sh  '''
+                    which python
+                    
+                    '''
             }
         }
     }
