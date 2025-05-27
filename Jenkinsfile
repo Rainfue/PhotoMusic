@@ -53,23 +53,23 @@ pipeline {
             }
         }
 
-        // // Подготовка виртуального окружения
-        // stage('Prepare venv') {
-        //     steps {
-        //         echo 'Starting create venv...'
-        //         // Создаю виртуальное окружение
-        //         sh  '''
-        //             python3 -m venv $VENV_DIR
-        //             . $VENV_DIR/Scripts/activate
-        //             which python
-        //             '''
-        //         // скачиваю бибилиотеки
-        //         sh  '''
-        //             pip install pandas
+        // Подготовка виртуального окружения
+        stage('Prepare venv') {
+            steps {
+                echo 'Starting create venv...'
+                // Создаю виртуальное окружение
+                sh  '''
+                    python3 -m venv $VENV_DIR
+                    . $VENV_DIR/Scripts/activate
+                    which python
+                    '''
+                // скачиваю бибилиотеки
+                sh  '''
+                    pip install pandas
 
-        //             '''
-        //     }
-        // }
+                    '''
+            }
+        }
 
         // Unit-тесты
         stage('Tests') {
