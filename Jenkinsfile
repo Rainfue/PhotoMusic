@@ -69,7 +69,7 @@ pipeline {
         }
 
         // Скачивание библиотек 
-        stafe('Launch libs') {
+        stage('Launch libs') {
             steps {
                 echo 'Starting download libs'
 
