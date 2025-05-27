@@ -60,7 +60,7 @@ pipeline {
                 // Создаю виртуальное окружение
                 sh  '''
                     python3 -m venv $VENV_DIR
-                    . $VENV_DIR/Scripts/activate
+                    . $VENV_DIR/bin/activate
                     which python
                     '''
                 // скачиваю бибилиотеки
