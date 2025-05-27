@@ -75,11 +75,11 @@ pipeline {
 
                 // Сначала устанавливаю PyTorch
                 sh  '''
-                    pip3 install torch torchvision torchaudio
+                    .venv/bin/pip install torch torchvision torchaudio
                     '''
                 // Далее, использую файл requirements4lnx.txt для установки остальных зависимостей
                 sh  '''
-                    pip3 install -r requirements4lnx.txt
+                    .venv/bin/pip install -r requirements4lnx.txt
                     '''
             }
         }
